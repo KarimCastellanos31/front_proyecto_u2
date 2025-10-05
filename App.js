@@ -1,7 +1,11 @@
+// Paso 1: ¡Esta línea DEBE ser la primera! Inicializa el manejador de gestos.
+import 'react-native-gesture-handler';
+
+// Paso 2: El resto de las importaciones
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, Alert } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 // --- Pantalla de Bienvenida (HomeScreen) ---
 function HomeScreen({ route }) {
@@ -27,12 +31,11 @@ function LoginScreen({ navigation }) {
         }
 
         try {
-            // --- ¡LÓGICA MEJORADA PARA MÓVIL Y WEB! ---
-            // Esto elige 'localhost' para la web y tu IP local para el móvil.
-            // ¡Asegúrate de reemplazar 'TU_IP_LOCAL' con la IP de tu computadora!
-            const ipServidor = Platform.OS === 'web' ? 'localhost' : 'TU_IP_LOCAL'; // Ejemplo: '192.168.1.121'
+            // --- Lógica CLAVE para MÓVIL y WEB ---
+            // En web, usamos 'localhost'. En móvil, DEBES usar la IP de tu computadora.
+            const ipServidor = Platform.OS === 'web' ? 'localhost' : '192.168.1.121'; // ¡Asegúrate de que esta IP sea la correcta!
             
-            const response = await fetch(`http://192.168.1.121:3000/login`, {
+            const response = await fetch(`http://${ipServidor}:3000/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -49,7 +52,7 @@ function LoginScreen({ navigation }) {
             }
         } catch (error) {
             console.error(error);
-            Alert.alert('Error de conexión', 'No se pudo conectar con el servidor. Verifica la dirección IP y que el servidor esté corriendo.');
+            Alert.alert('Error de conexión', 'No se pudo conectar con el servidor. Verifica que la IP sea correcta y que ambos dispositivos estén en la misma red WiFi.');
         }
     };
 
@@ -82,7 +85,7 @@ function LoginScreen({ navigation }) {
     );
 }
 
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 
 export default function App() {
     return (
