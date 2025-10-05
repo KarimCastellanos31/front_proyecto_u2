@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TextInput, TouchableOpacity, KeyboardAvoidingVi
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-// --- Pantalla de Bienvenida (la "otra pestaña") ---
+// --- Pantalla de Bienvenida (HomeScreen) ---
 function HomeScreen({ route }) {
     const { user } = route.params;
     return (
@@ -15,7 +15,7 @@ function HomeScreen({ route }) {
     );
 }
 
-// --- Pantalla de Login ---
+// --- Pantalla de Login (LoginScreen) ---
 function LoginScreen({ navigation }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -27,9 +27,12 @@ function LoginScreen({ navigation }) {
         }
 
         try {
-            // IMPORTANTE: Reemplaza 'TU_IP_LOCAL' con la IP de tu computadora.
-            // No uses 'localhost' porque el teléfono no lo entenderá.
-            const response = await fetch('http://192.168.100.12:3000/login', {
+            // --- ¡LÓGICA MEJORADA PARA MÓVIL Y WEB! ---
+            // Esto elige 'localhost' para la web y tu IP local para el móvil.
+            // ¡Asegúrate de reemplazar 'TU_IP_LOCAL' con la IP de tu computadora!
+            const ipServidor = Platform.OS === 'web' ? 'localhost' : 'TU_IP_LOCAL'; // Ejemplo: '192.168.1.121'
+            
+            const response = await fetch(`http://192.168.1.121:3000/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -40,14 +43,13 @@ function LoginScreen({ navigation }) {
             const data = await response.json();
 
             if (data.success) {
-                // Si el login es exitoso, navegamos a la pantalla HomeScreen
                 navigation.replace('Home', { user: data.user });
             } else {
                 Alert.alert('Error de inicio de sesión', data.message);
             }
         } catch (error) {
             console.error(error);
-            Alert.alert('Error de conexión', 'No se pudo conectar con el servidor.');
+            Alert.alert('Error de conexión', 'No se pudo conectar con el servidor. Verifica la dirección IP y que el servidor esté corriendo.');
         }
     };
 
@@ -93,7 +95,7 @@ export default function App() {
     );
 }
 
-// --- Estilos (son los mismos que tenías) ---
+// --- Estilos ---
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -136,5 +138,7 @@ const styles = StyleSheet.create({
     welcomeText: {
       fontSize: 20,
       color: '#333',
+      textAlign: 'center'
     }
 });
+
