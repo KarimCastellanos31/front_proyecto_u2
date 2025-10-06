@@ -25,6 +25,7 @@ function LoginScreen({ navigation }) {
     const [password, setPassword] = useState('');
 
     const handleLogin = async () => {
+        console.log('Trying logging...');
         if (!username || !password) {
             Alert.alert('Error', 'Por favor, ingresa tu usuario y contraseña.');
             return;
@@ -33,7 +34,7 @@ function LoginScreen({ navigation }) {
         try {
             // --- Lógica CLAVE para MÓVIL y WEB ---
             // En web, usamos 'localhost'. En móvil, DEBES usar la IP de tu computadora.
-            const ipServidor = Platform.OS === 'web' ? 'localhost' : '192.168.1.121'; // ¡Asegúrate de que esta IP sea la correcta!
+            const ipServidor = Platform.OS === 'web' ? 'localhost' : '192.168.68.200'; // ¡Asegúrate de que esta IP sea la correcta!
             
             const response = await fetch(`http://${ipServidor}:3000/login`, {
                 method: 'POST',
