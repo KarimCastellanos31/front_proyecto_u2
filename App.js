@@ -21,6 +21,7 @@ function HomeScreen({ route }) {
 
 // --- Pantalla de Login (LoginScreen) ---
 function LoginScreen({ navigation }) {
+    console.log("Hola!");
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
@@ -33,7 +34,7 @@ function LoginScreen({ navigation }) {
         try {
             // --- Lógica CLAVE para MÓVIL y WEB ---
             // En web, usamos 'localhost'. En móvil, DEBES usar la IP de tu computadora.
-            const ipServidor = Platform.OS === 'web' ? 'localhost' : '192.168.1.121'; // ¡Asegúrate de que esta IP sea la correcta!
+            const ipServidor = Platform.OS === 'web' ? 'localhost' : '172.20.10.5'; // ¡Asegúrate de que esta IP sea la correcta!
             
             const response = await fetch(`http://${ipServidor}:3000/login`, {
                 method: 'POST',
@@ -144,4 +145,5 @@ const styles = StyleSheet.create({
       textAlign: 'center'
     }
 });
+
 
