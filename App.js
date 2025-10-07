@@ -109,7 +109,7 @@ const styles = StyleSheet.create({//dany-- cambio en el front
         justifyContent: 'center',
         alignItems: 'center',
         padding: 20,
-        backgroundColor: #DDDAD0',
+        backgroundColor: '#DDDAD0',
     },
     title: {
         fontSize: 32,
