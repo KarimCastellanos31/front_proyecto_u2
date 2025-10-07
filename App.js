@@ -124,7 +124,7 @@ const styles = StyleSheet.create({//dany-- cambio en el front
         marginBottom: 20,
         borderRadius: 10,
         borderWidth: 1,
-        borderColor: '#ddd',
+        borderColor: '#3A432D',
         fontSize: 16,
     },
     button: {
