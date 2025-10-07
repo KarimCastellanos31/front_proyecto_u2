@@ -109,7 +109,7 @@ const styles = StyleSheet.create({//dany-- cambio en el front
         justifyContent: 'center',
         alignItems: 'center',
         padding: 20,
-        backgroundColor: '#f5f5f5',
+        backgroundColor: #DDDAD0',
     },
     title: {
         fontSize: 32,
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({//dany-- cambio en el front
     },
     input: {
         width: '100%',
-        backgroundColor: '#fff',
+        backgroundColor: '#DDDAD0',
         padding: 15,
         marginBottom: 20,
         borderRadius: 10,
@@ -129,13 +129,13 @@ const styles = StyleSheet.create({//dany-- cambio en el front
     },
     button: {
         width: '100%',
-        backgroundColor: '#007bff',
+        backgroundColor: '#3A432D',
         padding: 15,
         borderRadius: 10,
         alignItems: 'center',
     },
     buttonText: {
-        color: '#fff',
+        color: '#DDDAD0',
         fontSize: 18,
         fontWeight: 'bold',
     },
