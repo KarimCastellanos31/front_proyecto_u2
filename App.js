@@ -100,7 +100,7 @@ export default function App() {
 }
 
 // --- Estilos ---
-const styles = StyleSheet.create({
+const styles = StyleSheet.create({//dany-- cambio en el front
     container: {
         flex: 1,
     },
