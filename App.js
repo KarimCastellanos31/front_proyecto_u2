@@ -12,7 +12,7 @@ import { StatusBar } from 'expo-status-bar';
 
 // --- CONFIGURACIÓN DE CONEXIÓN ---
 // ¡Asegúrate de que esta IP sea la correcta!
-const IP_SERVIDOR = Platform.OS === 'web' ? 'localhost' : '192.168.1.121';
+const IP_SERVIDOR = Platform.OS === 'web' ? 'localhost' : '192.168.100.12';
 const API_URL = `http://${IP_SERVIDOR}:3000`;
 
 // --- PANTALLA DE CARGA INICIAL ---
@@ -127,28 +127,36 @@ function ProfesorDashboard() {
     const [selectedAlumno, setSelectedAlumno] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
     const [calificaciones, setCalificaciones] = useState([]);
+    const [addAlumnoModalVisible, setAddAlumnoModalVisible] = useState(false);
+    const [newAlumnoData, setNewAlumnoData] = useState({
+        nombre: '',
+        apellido: '',
+        username: '',
+        password: ''
+    });
 
-    // Estados para el formulario de agregar/editar
+    // Estados para el formulario de agregar/editar calificaciones
     const [materia, setMateria] = useState('');
     const [calificacion, setCalificacion] = useState('');
     const [isEditing, setIsEditing] = useState(false);
     const [materiaOriginal, setMateriaOriginal] = useState('');
 
 
-    useEffect(() => {
-        const fetchAlumnos = async () => {
-            try {
-                const response = await fetch(`${API_URL}/alumnos`);
-                const data = await response.json();
-                if (data.success) {
-                    setAlumnos(data.alumnos);
-                } else {
-                    Alert.alert('Error', 'No se pudo cargar la lista de alumnos.');
-                }
-            } catch (error) {
-                Alert.alert('Error', 'Error de conexión al buscar alumnos.');
+    const fetchAlumnos = async () => {
+        try {
+            const response = await fetch(`${API_URL}/alumnos`);
+            const data = await response.json();
+            if (data.success) {
+                setAlumnos(data.alumnos);
+            } else {
+                Alert.alert('Error', 'No se pudo cargar la lista de alumnos.');
             }
-        };
+        } catch (error) {
+            Alert.alert('Error', 'Error de conexión al buscar alumnos.');
+        }
+    };
+
+    useEffect(() => {
         fetchAlumnos();
     }, []);
 
@@ -171,7 +179,7 @@ function ProfesorDashboard() {
         setModalVisible(true);
     };
 
-    const handleAgregar = async () => {
+    const handleAgregarCalificacion = async () => {
         if (!materia || !calificacion) {
             Alert.alert('Error', 'Debes ingresar materia y calificación.');
             return;
@@ -199,7 +207,7 @@ function ProfesorDashboard() {
         }
     };
 
-    const handleActualizar = async () => {
+    const handleActualizarCalificacion = async () => {
         try {
             const response = await fetch(`${API_URL}/calificaciones`, {
                 method: 'PUT',
@@ -224,13 +232,9 @@ function ProfesorDashboard() {
         }
     };
     
-    // --- FUNCIÓN DE ELIMINAR MODIFICADA ---
-    // Se ha quitado el Alert.alert para llamar a la lógica directamente
-    const handleEliminar = async (materia) => {
+    const handleEliminarCalificacion = async (materia) => {
         try {
             const url = `${API_URL}/calificaciones?id_alumno=${selectedAlumno.id_user}&materia=${encodeURIComponent(materia)}`;
-            console.log(`<< [DEBUG] Enviando DELETE directamente a: ${url}`);
-
             const response = await fetch(url, {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' },
@@ -246,6 +250,33 @@ function ProfesorDashboard() {
             Alert.alert('Error de Red', `No se pudo eliminar la calificación. Error: ${error.message}`);
         }
     };
+    
+    const handleAgregarAlumno = async () => {
+        const { nombre, apellido, username, password } = newAlumnoData;
+        if (!nombre || !apellido || !username || !password) {
+            Alert.alert('Error', 'Todos los campos son requeridos.');
+            return;
+        }
+        try {
+            const response = await fetch(`${API_URL}/alumnos`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newAlumnoData),
+            });
+            const data = await response.json();
+            if (data.success) {
+                Alert.alert('Éxito', 'Alumno agregado correctamente.');
+                setAddAlumnoModalVisible(false);
+                setNewAlumnoData({ nombre: '', apellido: '', username: '', password: '' });
+                await fetchAlumnos(); // Refrescar la lista de alumnos
+            } else {
+                Alert.alert('Error', data.message);
+            }
+        } catch (error) {
+            Alert.alert('Error', 'No se pudo agregar el alumno.');
+        }
+    };
+
 
     const filteredAlumnos = alumnos.filter(a =>
         `${a.nombre} ${a.apellido}`.toLowerCase().includes(searchTerm.toLowerCase())
@@ -254,6 +285,9 @@ function ProfesorDashboard() {
     return (
         <View style={styles.inner}>
             <Text style={styles.title}>Panel del Profesor</Text>
+            <TouchableOpacity style={[styles.button, { marginBottom: 20, backgroundColor: '#28a745' }]} onPress={() => setAddAlumnoModalVisible(true)}>
+                <Text style={styles.buttonText}>Agregar Alumno</Text>
+            </TouchableOpacity>
             <TextInput
                 placeholder="Buscar alumno..."
                 style={styles.input}
@@ -270,6 +304,7 @@ function ProfesorDashboard() {
                 )}
             />
 
+            {/* Modal para Ver/Editar Calificaciones */}
             {selectedAlumno && (
                 <Modal visible={modalVisible} animationType="slide" onRequestClose={() => {
                     setModalVisible(false);
@@ -297,7 +332,7 @@ function ProfesorDashboard() {
                             />
                             <TouchableOpacity 
                                 style={[styles.button, {backgroundColor: isEditing ? '#28a745' : '#007bff'}]} 
-                                onPress={isEditing ? handleActualizar : handleAgregar}
+                                onPress={isEditing ? handleActualizarCalificacion : handleAgregarCalificacion}
                             >
                                 <Text style={styles.buttonText}>{isEditing ? 'Actualizar Calificación' : 'Agregar Calificación'}</Text>
                             </TouchableOpacity>
@@ -333,7 +368,7 @@ function ProfesorDashboard() {
                                         </TouchableOpacity>
                                         <TouchableOpacity 
                                             style={[styles.actionButton, styles.deleteButton]} 
-                                            onPress={() => handleEliminar(item.materia)}
+                                            onPress={() => handleEliminarCalificacion(item.materia)}
                                         >
                                             <Text style={styles.actionButtonText}>Eliminar</Text>
                                         </TouchableOpacity>
@@ -345,6 +380,45 @@ function ProfesorDashboard() {
                     </View>
                 </Modal>
             )}
+
+            {/* Modal para Agregar Alumno */}
+            <Modal visible={addAlumnoModalVisible} animationType="slide" onRequestClose={() => setAddAlumnoModalVisible(false)}>
+                <View style={styles.modalContent}>
+                    <Text style={styles.title}>Agregar Nuevo Alumno</Text>
+                    <TextInput
+                        placeholder="Nombre"
+                        style={styles.input}
+                        value={newAlumnoData.nombre}
+                        onChangeText={(text) => setNewAlumnoData({...newAlumnoData, nombre: text})}
+                    />
+                    <TextInput
+                        placeholder="Apellido"
+                        style={styles.input}
+                        value={newAlumnoData.apellido}
+                        onChangeText={(text) => setNewAlumnoData({...newAlumnoData, apellido: text})}
+                    />
+                    <TextInput
+                        placeholder="Nombre de Usuario"
+                        style={styles.input}
+                        value={newAlumnoData.username}
+                        onChangeText={(text) => setNewAlumnoData({...newAlumnoData, username: text})}
+                        autoCapitalize="none"
+                    />
+                    <TextInput
+                        placeholder="Contraseña"
+                        style={styles.input}
+                        value={newAlumnoData.password}
+                        onChangeText={(text) => setNewAlumnoData({...newAlumnoData, password: text})}
+                        secureTextEntry
+                    />
+                    <TouchableOpacity style={styles.button} onPress={handleAgregarAlumno}>
+                        <Text style={styles.buttonText}>Guardar Alumno</Text>
+                    </TouchableOpacity>
+                    <View style={{marginTop: 20}}>
+                       <Button title="Cancelar" onPress={() => setAddAlumnoModalVisible(false)} color="#6c757d"/>
+                    </View>
+                </View>
+            </Modal>
         </View>
     );
 }
@@ -429,8 +503,8 @@ const styles = StyleSheet.create({
     },
     modalContent: {
         flex: 1,
+        justifyContent: 'center',
         padding: 20,
-        paddingTop: 50,
     },
     calificacionRow: {
         flexDirection: 'row',
