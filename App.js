@@ -400,6 +400,10 @@ export default function App() {
 }
 
 
+// --- Estilos ---
+const styles = StyleSheet.create({//dany-- cambio en el front
+
+
 // --- ESTILOS ---
 const styles = StyleSheet.create({
     container: { flex: 1 },
@@ -423,5 +427,102 @@ const styles = StyleSheet.create({
     actionButtonSmall: { paddingVertical: 5, paddingHorizontal: 10, borderRadius: 5, backgroundColor: '#007bff', marginLeft: 8 },
     editButton: { backgroundColor: '#ffc107' },
     actionButtonTextSmall: { color: 'white', fontSize: 12, fontWeight: 'bold' }
+
+
+    container: {
+        flex: 1,
+    },
+    inner: {
+        flex: 1,
+        justifyContent: 'center',
+        padding: 20,
+        backgroundColor: '#DDDAD0',
+    },
+    title: {
+        fontSize: 32,
+        fontWeight: 'bold',
+        marginBottom: 20,
+        textAlign: 'center',
+        color: '#333',
+    },
+    input: {
+        width: '100%',
+        backgroundColor: '#DDDAD0',
+        padding: 15,
+        marginBottom: 15,
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: '#3A432D',
+        fontSize: 16,
+    },
+    button: {
+        width: '100%',
+        backgroundColor: '#3A432D',
+        padding: 15,
+        borderRadius: 10,
+        alignItems: 'center',
+    },
+    buttonText: {
+        color: '#DDDAD0',
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
+    alumnoRow: {
+        padding: 15,
+        backgroundColor: 'white',
+        borderBottomWidth: 1,
+        borderBottomColor: '#eee',
+    },
+    modalContent: {
+        flex: 1,
+        justifyContent: 'center',
+        padding: 20,
+    },
+    calificacionRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: 15,
+        backgroundColor: 'white',
+        borderBottomWidth: 1,
+        borderBottomColor: '#eee',
+    },
+    materiaText: {
+        fontSize: 16,
+        flex: 1,
+    },
+    calificacionText: {
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+    actionsContainer: {
+        flexDirection: 'row',
+    },
+    actionButton: {
+        paddingVertical: 6,
+        paddingHorizontal: 12,
+        borderRadius: 5,
+        backgroundColor: '#6c757d',
+        marginLeft: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    deleteButton: {
+        backgroundColor: '#dc3545',
+    },
+    actionButtonText: {
+        color: 'white',
+        fontSize: 14,
+        fontWeight: '500',
+    },
+    formContainer: {
+        marginBottom: 20,
+        padding: 15,
+        backgroundColor: '#f9f9f9',
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: '#ddd'
+    }
+
 });
 
